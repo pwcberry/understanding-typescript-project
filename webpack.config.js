@@ -4,11 +4,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        main: [require.resolve('webpack-dev-server/client') + '?/', require.resolve('webpack/hot/dev-server'), path.resolve(__dirname, './src/index.tsx')],
+        main: [require.resolve('webpack-dev-server/client') + '?/', require.resolve('webpack/hot/dev-server'), path.resolve(__dirname, './src/main.ts')],
     },
     devtool: 'eval-cheap-module-source-map',
     resolve: {
-        extensions: ['.ts', '.tsx', '.js'],
+        extensions: ['.ts', '.js'],
     },
     output: {
         filename: '[name].js',
