@@ -1,4 +1,4 @@
-import { Project } from "./Project";
+import { Project, ProjectStatus } from "./Project";
 
 type ListenerFn = (project: Project) => void;
 
@@ -16,20 +16,24 @@ export default class ProjectState {
     return this._instance;
   }
 
-  get projects() {
-    return this._projects;
-  }
-
   addListener(listener: ListenerFn) {
     this._listeners.push(listener);
   }
 
   addProject(title: string, description: string, people: number) {
     const project = new Project(title, description, people);
-    this.projects.push(project);
+    this._projects.push(project);
 
     for (const listener of this._listeners) {
       listener(project);
     }
+  }
+
+  getProject(id: string): Project | undefined {
+    return this._projects.find((p) => p.id === id);
+  }
+
+  getProjectsByStatus(status: ProjectStatus): Project[] {
+    return this._projects.filter((p) => p.status === status);
   }
 }

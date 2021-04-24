@@ -29,6 +29,7 @@ export default class ProjectInput {
 
     this.attach();
     this.configure();
+    this.configureForDummyValues();
   }
 
   // Return a tuple
@@ -73,5 +74,13 @@ export default class ProjectInput {
 
   private attach() {
     this.hostElement.insertAdjacentElement("afterbegin", this.formElement);
+  }
+
+  private configureForDummyValues() {
+    this.formElement.addEventListener("dblclick", () => {
+      this.titleInputElement.value = "Project Wah Wah";
+      this.descriptionInputElement.value = "This is the research into Jimi Hendrix's use of the wah-wah pedal.";
+      this.peopleInputElement.value = "3";
+    });
   }
 }

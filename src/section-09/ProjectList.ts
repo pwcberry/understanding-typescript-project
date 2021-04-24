@@ -6,6 +6,7 @@ import { Project, ProjectStatus } from "./Project";
 export default class ProjectList {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
+  listElement: HTMLUListElement;
   element: HTMLElement;
 
   constructor(private type: ProjectStatus) {
@@ -14,6 +15,10 @@ export default class ProjectList {
     const importedNode = document.importNode(this.templateElement.content, true);
     this.element = <HTMLElement>importedNode.firstElementChild;
     this.element.id = `${this.type}-projects`;
+
+    this.listElement = <HTMLUListElement>this.element.querySelector("ul");
+    this.listElement.id = `${this.element.id}-list`;
+
     ProjectState.instance.addListener(this.onProjectAdded);
     this.attach();
     this.renderContent();
@@ -21,14 +26,14 @@ export default class ProjectList {
 
   @autobind
   private onProjectAdded(project: Project) {
-    const list = <HTMLUListElement>this.element.querySelector(`#${this.element.id}-list`);
-    const item = <HTMLLIElement>document.createElement("li");
-    item.textContent = project.title;
-    list.appendChild(item);
+    if (project.status === this.type) {
+      const item = <HTMLLIElement>document.createElement("li");
+      item.textContent = project.title;
+      this.listElement.appendChild(item);
+    }
   }
 
   private renderContent() {
-    this.element.querySelector("ul")!.id = `${this.element.id}-list`;
     this.element.querySelector("h2")!.textContent = `${this.type} projects`;
   }
 
