@@ -8,4 +8,9 @@ function isNumberValue(s: string): boolean {
   return !isNaN(v);
 }
 
-export { isBlank, isNumberValue };
+function generateId(prefix: string) {
+  const timestamp = Date.now().toString(16);
+  return `${prefix}-${timestamp}`;
+}
+
+export { generateId, isBlank, isNumberValue };
