@@ -91,6 +91,7 @@ button:active {
 .projects h2 {
     margin: 0;
     color: white;
+    text-transform: uppercase;
 }
 
 .projects ul {
@@ -135,4 +136,19 @@ button:active {
     padding: 1rem;
     border: 1px solid #ff0062;
     background: #f7f7f7;
+}
+
+.error-message {
+    color: #ff0062;
+    padding: 0.5em 0.75em;
+    margin: 0.5em 0;
+    background-color: white;
+    box-shadow: 2px 1px rgba(0,0,0,0.1);
+    border-top: 2px solid #ff0062;
+    display: none;
+}
+
+.error-message > p {
+    line-height: 1;
+    margin: 0;
 }

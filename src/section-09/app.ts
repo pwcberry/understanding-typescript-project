@@ -1,12 +1,15 @@
 import { autobind } from "./decorators";
+import ProjectList from "./ProjectList";
+import { validateNumber, validateString } from "./validator";
 
 class ProjectInput {
-  templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement;
-  formElement: HTMLFormElement;
+  private templateElement: HTMLTemplateElement;
+  private hostElement: HTMLDivElement;
+  private readonly formElement: HTMLFormElement;
   private titleInputElement: HTMLInputElement;
   private descriptionInputElement: HTMLInputElement;
   private peopleInputElement: HTMLInputElement;
+  private errorMessage: HTMLDivElement;
 
   constructor() {
     this.templateElement = document.getElementById("project-input")! as HTMLTemplateElement;
@@ -20,14 +23,45 @@ class ProjectInput {
     this.descriptionInputElement = <HTMLInputElement>this.formElement.querySelector("#description");
     this.peopleInputElement = <HTMLInputElement>this.formElement.querySelector("#people");
 
+    this.errorMessage = <HTMLDivElement>this.formElement.querySelector(".error-message");
+
     this.attach();
     this.configure();
+  }
+
+  // Return a tuple
+  private gatherUserInput(): [string, string, number] | undefined {
+    const title = this.titleInputElement.value;
+    const description = this.descriptionInputElement.value;
+    const people = this.peopleInputElement.value;
+
+    const isValid =
+      validateString({ value: title, required: true }) &&
+      validateString({ value: description, required: true, minLength: 5 }) &&
+      validateNumber({ value: people, required: true, min: 1, max: 5 });
+
+    if (!isValid) {
+      this.errorMessage.style.display = "block";
+      return;
+    }
+    this.errorMessage.style.display = "";
+    return [title, description, parseInt(people)];
+  }
+
+  private clearForm() {
+    this.titleInputElement.value = "";
+    this.descriptionInputElement.value = "";
+    this.peopleInputElement.value = "";
   }
 
   @autobind
   private submitHandler(event: Event) {
     event.preventDefault();
-    console.log(this.titleInputElement.value);
+    const userInput = this.gatherUserInput();
+    if (Array.isArray(userInput)) {
+      console.log(userInput);
+      this.clearForm();
+    }
   }
 
   private configure() {
@@ -40,3 +74,5 @@ class ProjectInput {
 }
 
 const prjInput = new ProjectInput();
+const activePrjList = new ProjectList("active");
+const finishedPrjList = new ProjectList("finished");
