@@ -3,6 +3,7 @@ import { autobind } from "./decorators";
 import Component from "./Component";
 import ProjectState from "./ProjectState";
 import { Project, ProjectStatus } from "./Project";
+import ProjectListItem from "./ProjectListItem";
 
 export default class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   private readonly listElement: HTMLUListElement;
@@ -20,9 +21,8 @@ export default class ProjectList extends Component<HTMLDivElement, HTMLElement> 
   @autobind
   private onProjectAdded(project: Project) {
     if (project.status === this.type) {
-      const item = <HTMLLIElement>document.createElement("li");
-      item.textContent = project.title;
-      this.listElement.appendChild(item);
+      const item = new ProjectListItem(this.listElement.id, project);
+      item.renderContent();
     }
   }
 

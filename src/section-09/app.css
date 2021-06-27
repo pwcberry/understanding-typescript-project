@@ -48,6 +48,12 @@ textarea:focus {
     background: #fff5f9;
 }
 
+input::placeholder,
+textarea::placeholder {
+    font-style: italic;
+    color: #e0e2e4;
+}
+
 button {
     font: inherit;
     background: #ff0062;

@@ -65,10 +65,8 @@ export default class ProjectInput extends Component<HTMLDivElement, HTMLFormElem
   }
 
   renderContent() {
-    this.element.addEventListener("dblclick", () => {
-      this.titleInputElement.value = "Project Wah Wah";
-      this.descriptionInputElement.value = "This is the research into Jimi Hendrix's use of the wah-wah pedal.";
-      this.peopleInputElement.value = "3";
-    });
+    this.titleInputElement.placeholder = "The title for the project";
+    this.descriptionInputElement.placeholder = "A brief description of the project";
+    this.peopleInputElement.placeholder = "The number of people involved";
   }
 }
