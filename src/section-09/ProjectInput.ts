@@ -1,35 +1,27 @@
 import ProjectState from "./ProjectState";
 import { validateNumber, validateString } from "./validator";
 import { autobind } from "./decorators";
+import Component from "./Component";
 
 const projectState = ProjectState.instance;
 
-export default class ProjectInput {
-  private templateElement: HTMLTemplateElement;
-  private hostElement: HTMLDivElement;
-  private readonly formElement: HTMLFormElement;
+export default class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   private titleInputElement: HTMLInputElement;
   private descriptionInputElement: HTMLInputElement;
   private peopleInputElement: HTMLInputElement;
   private errorMessage: HTMLDivElement;
 
   constructor() {
-    this.templateElement = document.getElementById("project-input")! as HTMLTemplateElement;
-    this.hostElement = document.getElementById("app")! as HTMLDivElement;
+    super("project-input", "app", true, "user-input");
 
-    const importedNode = document.importNode(this.templateElement.content, true);
-    this.formElement = importedNode.firstElementChild as HTMLFormElement;
-    this.formElement.id = "user-input";
+    this.titleInputElement = <HTMLInputElement>this.element.querySelector("#title");
+    this.descriptionInputElement = <HTMLInputElement>this.element.querySelector("#description");
+    this.peopleInputElement = <HTMLInputElement>this.element.querySelector("#people");
 
-    this.titleInputElement = <HTMLInputElement>this.formElement.querySelector("#title");
-    this.descriptionInputElement = <HTMLInputElement>this.formElement.querySelector("#description");
-    this.peopleInputElement = <HTMLInputElement>this.formElement.querySelector("#people");
+    this.errorMessage = <HTMLDivElement>this.element.querySelector(".error-message");
 
-    this.errorMessage = <HTMLDivElement>this.formElement.querySelector(".error-message");
-
-    this.attach();
     this.configure();
-    this.configureForDummyValues();
+    this.renderContent();
   }
 
   // Return a tuple
@@ -68,16 +60,12 @@ export default class ProjectInput {
     }
   }
 
-  private configure() {
-    this.formElement.addEventListener("submit", this.submitHandler);
+  configure() {
+    this.element.addEventListener("submit", this.submitHandler);
   }
 
-  private attach() {
-    this.hostElement.insertAdjacentElement("afterbegin", this.formElement);
-  }
-
-  private configureForDummyValues() {
-    this.formElement.addEventListener("dblclick", () => {
+  renderContent() {
+    this.element.addEventListener("dblclick", () => {
       this.titleInputElement.value = "Project Wah Wah";
       this.descriptionInputElement.value = "This is the research into Jimi Hendrix's use of the wah-wah pedal.";
       this.peopleInputElement.value = "3";

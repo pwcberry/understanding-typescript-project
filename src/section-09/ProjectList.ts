@@ -1,26 +1,19 @@
 import { autobind } from "./decorators";
 
+import Component from "./Component";
 import ProjectState from "./ProjectState";
 import { Project, ProjectStatus } from "./Project";
 
-export default class ProjectList {
-  templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement;
-  listElement: HTMLUListElement;
-  element: HTMLElement;
+export default class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+  private readonly listElement: HTMLUListElement;
 
   constructor(private type: ProjectStatus) {
-    this.templateElement = <HTMLTemplateElement>document.getElementById("project-list");
-    this.hostElement = <HTMLDivElement>document.getElementById("app");
-    const importedNode = document.importNode(this.templateElement.content, true);
-    this.element = <HTMLElement>importedNode.firstElementChild;
-    this.element.id = `${this.type}-projects`;
+    super("project-list", "app", false, `${type}-projects`);
 
     this.listElement = <HTMLUListElement>this.element.querySelector("ul");
     this.listElement.id = `${this.element.id}-list`;
 
-    ProjectState.instance.addListener(this.onProjectAdded);
-    this.attach();
+    this.configure();
     this.renderContent();
   }
 
@@ -33,11 +26,11 @@ export default class ProjectList {
     }
   }
 
-  private renderContent() {
-    this.element.querySelector("h2")!.textContent = `${this.type} projects`;
+  configure() {
+    ProjectState.instance.addListener(this.onProjectAdded);
   }
 
-  private attach() {
-    this.hostElement.insertAdjacentElement("beforeend", this.element);
+  renderContent() {
+    this.element.querySelector("h2")!.textContent = `${this.type} projects`;
   }
 }
